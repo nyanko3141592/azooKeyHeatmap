@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>azooKey キーボード評価ツール</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <header>
+    <h1>azooKey キーボード評価ツール</h1>
+    <p class="subtitle">Custard JSON をアップロードしてキーボードを可視化・評価</p>
+  </header>
+
+  <main>
+    <section id="upload-section">
+      <div id="drop-zone">
+        <p>Custard JSON ファイルをドラッグ＆ドロップ<br>または</p>
+        <label for="file-input" class="file-label">ファイルを選択</label>
+        <input type="file" id="file-input" accept=".json,.custard,.txt" />
+      </div>
+      <div id="sample-buttons">
+        <p>サンプルキーボードを試す:</p>
+        <button class="sample-btn" data-sample="フリック入力1.json">フリック入力</button>
+        <button class="sample-btn" data-sample="ローマ字入力1.json">ローマ字入力 (QWERTY)</button>
+        <button class="sample-btn" data-sample="ローマ字入力2.json">ローマ字入力 (GODAN)</button>
+        <button class="sample-btn" data-sample="英字入力1.json">英字入力</button>
+      </div>
+    </section>
+
+    <section id="keyboard-section" class="hidden">
+      <h2 id="keyboard-name"></h2>
+      <div id="keyboard-container">
+        <canvas id="keyboard-canvas"></canvas>
+      </div>
+
+      <div id="controls">
+        <div id="mode-select">
+          <h3>評価モード</h3>
+          <div class="radio-group">
+            <label><input type="radio" name="mode" value="hiragana" checked /> 日本語入力（ひらがな直接入力）</label>
+            <label><input type="radio" name="mode" value="romaji" /> ローマ字入力</label>
+            <label><input type="radio" name="mode" value="english" /> 英字入力</label>
+          </div>
+        </div>
+
+        <div id="corpus-input">
+          <h3>評価テキスト（空欄で組み込みコーパスを使用）</h3>
+          <textarea id="custom-corpus" rows="3" placeholder="任意のテキストを入力..."></textarea>
+        </div>
+
+        <button id="evaluate-btn">評価実行</button>
+      </div>
+    </section>
+
+    <section id="results-section" class="hidden">
+      <h2>評価結果</h2>
+
+      <div class="heatmap-section">
+        <h3>キー単位ヒートマップ</h3>
+        <div id="heatmap-container">
+          <canvas id="heatmap-canvas"></canvas>
+        </div>
+      </div>
+
+      <div class="heatmap-section">
+        <h3>フリック詳細ヒートマップ</h3>
+        <div id="flick-heatmap-container">
+          <canvas id="flick-heatmap-canvas"></canvas>
+        </div>
+      </div>
+
+      <div id="scores">
+        <div class="score-card" id="score-total">
+          <div class="score-label">総合スコア</div>
+          <div class="score-value">--</div>
+        </div>
+        <div class="score-card" id="score-coverage">
+          <div class="score-label">カバー率</div>
+          <div class="score-value">--</div>
+        </div>
+        <div class="score-card" id="score-distance">
+          <div class="score-label">打鍵距離</div>
+          <div class="score-value">--</div>
+        </div>
+        <div class="score-card" id="score-evenness">
+          <div class="score-label">均等性</div>
+          <div class="score-value">--</div>
+        </div>
+        <div class="score-card" id="score-same-key">
+          <div class="score-label">同キー連続率</div>
+          <div class="score-value">--</div>
+        </div>
+      </div>
+
+      <div id="details">
+        <h3>詳細統計</h3>
+        <div id="stats-table"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p><a href="https://github.com/azooKey/CustardKit" target="_blank">CustardKit</a> JSON 形式に対応</p>
+  </footer>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
