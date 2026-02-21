@@ -57,24 +57,24 @@ function computeMedianKeyWidth(keys: CustardKeyEntry[]): number {
 
 export function computeLayout(custard: Custard, maxWidth: number): LayoutInfo {
   const layout = custard.interface.key_layout;
-  const declaredRowCount = Math.floor(layout.row_count);
-  const declaredColCount = Math.floor(layout.column_count);
+  const declaredRowCount = Math.floor(layout.row_count || 0);
+  const declaredColCount = Math.floor(layout.column_count || 0);
   const isTenkey = custard.interface.key_style === 'tenkey_style';
 
-  let maxCol = declaredRowCount;
-  let maxRow = declaredColCount;
+  let computedCol = 0;
+  let computedRow = 0;
   for (const entry of custard.interface.keys) {
     if (entry.specifier_type === 'grid_fit') {
       const spec = entry.specifier as GridFitSpecifier;
       const rightEdge = spec.x + (spec.width ?? 1);
       const bottomEdge = spec.y + (spec.height ?? 1);
-      if (rightEdge > maxCol) maxCol = rightEdge;
-      if (bottomEdge > maxRow) maxRow = bottomEdge;
+      if (rightEdge > computedCol) computedCol = rightEdge;
+      if (bottomEdge > computedRow) computedRow = bottomEdge;
     }
   }
 
-  const rowCount = maxCol;
-  const colCount = maxRow;
+  const rowCount = Math.max(1, declaredRowCount > 0 ? declaredRowCount : computedCol);
+  const colCount = Math.max(1, declaredColCount > 0 ? declaredColCount : computedRow);
   const cellW = maxWidth / rowCount;
   const medianKeyWidth = computeMedianKeyWidth(custard.interface.keys);
   const effectiveKeyW = cellW * medianKeyWidth;
@@ -93,16 +93,16 @@ export function computeRenderedKeys(custard: Custard, li: LayoutInfo): RenderedK
       const spec = entry.specifier as GridFitSpecifier;
       kx = spec.x * li.cellW + KEY_PADDING;
       ky = spec.y * li.cellH + KEY_PADDING;
-      kw = (spec.width ?? 1) * li.cellW - KEY_PADDING * 2;
-      kh = (spec.height ?? 1) * li.cellH - KEY_PADDING * 2;
+      kw = Math.max(1, (spec.width ?? 1) * li.cellW - KEY_PADDING * 2);
+      kh = Math.max(1, (spec.height ?? 1) * li.cellH - KEY_PADDING * 2);
     } else {
       const spec = entry.specifier as { index: number };
       const col = spec.index % li.rowCount;
       const row = Math.floor(spec.index / li.rowCount);
       kx = col * li.cellW + KEY_PADDING;
       ky = row * li.cellH + KEY_PADDING;
-      kw = li.cellW - KEY_PADDING * 2;
-      kh = li.cellH - KEY_PADDING * 2;
+      kw = Math.max(1, li.cellW - KEY_PADDING * 2);
+      kh = Math.max(1, li.cellH - KEY_PADDING * 2);
     }
     renderedKeys.push({ entry, rect: { x: kx, y: ky, w: kw, h: kh } });
   }

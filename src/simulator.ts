@@ -140,6 +140,14 @@ export function buildCharacterMaps(custard: Custard): CharacterMaps {
           }
         }
       }
+      if (variation.type === 'flick_variation' && variation.direction) {
+        const flickDir = variation.direction;
+        for (const action of variation.key.longpress_actions?.start || []) {
+          if (action.type === 'input' && action.text) {
+            registerDirect(action.text, makeMapping(flickDir));
+          }
+        }
+      }
     }
   });
 

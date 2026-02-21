@@ -26,12 +26,31 @@ function validateCustard(data: unknown): Custard {
     throw new Error('無効なCustard JSON: key_layout または keys が見つかりません');
   }
 
+  const layout = iface.key_layout as Record<string, unknown>;
+  if (typeof layout.row_count !== 'number') layout.row_count = 0;
+  if (typeof layout.column_count !== 'number') layout.column_count = 0;
+
   const keys = iface.keys as CustardKeyEntry[];
   for (const entry of keys) {
+    if (!entry.key) {
+      (entry as any).key = { design: { label: { text: '?' }, color: 'normal' }, press_actions: [], variations: [] };
+    }
+    const key = entry.key as any;
+    if (!key.design) {
+      key.design = { label: { text: '?' }, color: 'normal' };
+    }
+    if (!key.design.label) {
+      key.design.label = { text: '?' };
+    }
+    if (!key.press_actions) key.press_actions = [];
+    if (!key.variations) key.variations = [];
+
     if (entry.specifier_type === 'grid_fit') {
       const spec = entry.specifier as GridFitSpecifier;
-      if (spec.width === undefined) spec.width = 1;
-      if (spec.height === undefined) spec.height = 1;
+      if (typeof spec.x !== 'number') (spec as any).x = 0;
+      if (typeof spec.y !== 'number') (spec as any).y = 0;
+      if (typeof spec.width !== 'number') spec.width = 1;
+      if (typeof spec.height !== 'number') spec.height = 1;
     }
   }
 

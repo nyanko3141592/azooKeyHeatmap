@@ -80,22 +80,39 @@ function loadFile(file: File) {
   reader.readAsText(file);
 }
 
+function detectEvaluationMode(custard: Custard): EvaluationMode {
+  if (custard.input_style === 'roman2kana') return 'romaji';
+  if (custard.language === 'ja_JP') return 'hiragana';
+  return 'english';
+}
+
 function loadCustard(custard: Custard) {
   currentCustard = custard;
   resultsSection.classList.add('hidden');
   clearError();
 
+  const mode = detectEvaluationMode(custard);
+  const radio = document.querySelector<HTMLInputElement>(`input[name="mode"][value="${mode}"]`);
+  if (radio) radio.checked = true;
+
   keyboardName.textContent = `${custard.metadata.display_name} (${custard.identifier})`;
 
-  const containerWidth = Math.min(
-    document.getElementById('keyboard-container')!.clientWidth - 20,
-    420
-  );
-  const result = renderKeyboard(keyboardCanvas, custard, containerWidth);
-  renderedKeys = result.renderedKeys;
-  layoutInfo = result.layoutInfo;
-
   keyboardSection.classList.remove('hidden');
+
+  const containerWidth = Math.max(
+    100,
+    Math.min(
+      document.getElementById('keyboard-container')!.clientWidth - 20,
+      420
+    )
+  );
+  try {
+    const result = renderKeyboard(keyboardCanvas, custard, containerWidth);
+    renderedKeys = result.renderedKeys;
+    layoutInfo = result.layoutInfo;
+  } catch (err) {
+    showError(`キーボードの描画に失敗しました: ${(err as Error).message}`);
+  }
 }
 
 evaluateBtn.addEventListener('click', () => {
