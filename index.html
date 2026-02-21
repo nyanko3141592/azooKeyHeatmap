@@ -54,48 +54,112 @@
     </section>
 
     <section id="results-section" class="hidden">
-      <h2>評価結果</h2>
+      <div id="results-card">
+        <div id="score-hero">
+          <div id="score-gauge">
+            <svg viewBox="0 0 120 120">
+              <defs>
+                <linearGradient id="score-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" id="grad-stop-1" stop-color="#228be6" />
+                  <stop offset="100%" id="grad-stop-2" stop-color="#7048e8" />
+                </linearGradient>
+              </defs>
+              <circle class="ring-bg" cx="60" cy="60" r="52" />
+              <circle id="score-ring-fill" cx="60" cy="60" r="52" />
+            </svg>
+            <div id="score-center">
+              <div id="score-number">--</div>
+              <div id="score-rank"></div>
+            </div>
+          </div>
+          <div id="score-info">
+            <h2 id="result-kb-name"></h2>
+            <p id="result-eval-meta"></p>
+          </div>
+        </div>
 
-      <div class="heatmap-section">
-        <h3>キー単位ヒートマップ</h3>
-        <div id="heatmap-container">
-          <canvas id="heatmap-canvas"></canvas>
+        <div id="sub-scores">
+          <div class="sub-score" data-id="coverage">
+            <div class="sub-score-top">
+              <span class="sub-label">カバー率</span>
+              <span class="sub-value"></span>
+            </div>
+            <div class="progress-track"><div class="progress-fill"></div></div>
+          </div>
+          <div class="sub-score" data-id="distance">
+            <div class="sub-score-top">
+              <span class="sub-label">打鍵距離</span>
+              <span class="sub-value"></span>
+            </div>
+            <div class="progress-track"><div class="progress-fill"></div></div>
+          </div>
+          <div class="sub-score" data-id="evenness">
+            <div class="sub-score-top">
+              <span class="sub-label">均等性</span>
+              <span class="sub-value"></span>
+            </div>
+            <div class="progress-track"><div class="progress-fill"></div></div>
+          </div>
+          <div class="sub-score" data-id="samekey">
+            <div class="sub-score-top">
+              <span class="sub-label">同キー連続</span>
+              <span class="sub-value"></span>
+            </div>
+            <div class="progress-track"><div class="progress-fill"></div></div>
+          </div>
         </div>
       </div>
 
-      <div class="heatmap-section">
-        <h3>フリック詳細ヒートマップ</h3>
-        <div id="flick-heatmap-container">
-          <canvas id="flick-heatmap-canvas"></canvas>
+      <div id="heatmap-section">
+        <div id="heatmap-tabs">
+          <button class="heatmap-tab active" data-target="key">キー単位</button>
+          <button class="heatmap-tab" data-target="flick">フリック詳細</button>
+          <button class="heatmap-tab" data-target="trail">指の軌跡</button>
+        </div>
+        <div id="heatmap-panels">
+          <div id="heatmap-panel-key" class="heatmap-panel">
+            <div class="heatmap-wrap"><canvas id="heatmap-canvas"></canvas></div>
+          </div>
+          <div id="heatmap-panel-flick" class="heatmap-panel hidden">
+            <div class="heatmap-wrap"><canvas id="flick-heatmap-canvas"></canvas></div>
+          </div>
+          <div id="heatmap-panel-trail" class="heatmap-panel hidden">
+            <div class="heatmap-wrap"><canvas id="trail-canvas"></canvas></div>
+            <div id="trail-controls">
+              <button id="trail-replay-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="1 4 1 10 7 10"></polyline>
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+                リプレイ
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div id="scores">
-        <div class="score-card" id="score-total">
-          <div class="score-label">総合スコア</div>
-          <div class="score-value">--</div>
-        </div>
-        <div class="score-card" id="score-coverage">
-          <div class="score-label">カバー率</div>
-          <div class="score-value">--</div>
-        </div>
-        <div class="score-card" id="score-distance">
-          <div class="score-label">打鍵距離</div>
-          <div class="score-value">--</div>
-        </div>
-        <div class="score-card" id="score-evenness">
-          <div class="score-label">均等性</div>
-          <div class="score-value">--</div>
-        </div>
-        <div class="score-card" id="score-same-key">
-          <div class="score-label">同キー連続率</div>
-          <div class="score-value">--</div>
-        </div>
+      <div id="frequency-section">
+        <h3>打鍵頻度 TOP 10</h3>
+        <div id="freq-chart"></div>
       </div>
 
-      <div id="details">
+      <div id="stats-section">
         <h3>詳細統計</h3>
-        <div id="stats-table"></div>
+        <div id="stats-grid"></div>
+        <div id="unmapped-section" class="hidden">
+          <h4>マッピング不可文字</h4>
+          <div id="unmapped-chars"></div>
+        </div>
+      </div>
+
+      <div id="share-actions">
+        <button id="share-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          結果をコピー
+        </button>
       </div>
     </section>
   </main>

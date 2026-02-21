@@ -46,7 +46,7 @@ section {
   display: none !important;
 }
 
-/* Upload */
+/* ==================== Upload ==================== */
 #drop-zone {
   border: 2px dashed #adb5bd;
   border-radius: 12px;
@@ -116,7 +116,7 @@ section {
   color: #228be6;
 }
 
-/* Keyboard */
+/* ==================== Keyboard ==================== */
 #keyboard-section h2 {
   font-size: 1.2rem;
   margin-bottom: 1rem;
@@ -134,7 +134,7 @@ section {
   border-radius: 12px;
 }
 
-/* Controls */
+/* ==================== Controls ==================== */
 #controls {
   background: #fff;
   border-radius: 12px;
@@ -202,106 +202,392 @@ section {
   opacity: 0.9;
 }
 
-/* Results */
-#results-section h2 {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  color: #495057;
-}
-
-.heatmap-section {
+/* ==================== Results Card ==================== */
+#results-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   margin-bottom: 1.5rem;
 }
 
-.heatmap-section h3 {
-  font-size: 0.95rem;
-  color: #495057;
+/* Score Hero */
+#score-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+#score-gauge {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  flex-shrink: 0;
+}
+
+#score-gauge svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.ring-bg {
+  fill: none;
+  stroke: #f1f3f5;
+  stroke-width: 8;
+}
+
+#score-ring-fill {
+  fill: none;
+  stroke: url(#score-gradient);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 326.73;
+  stroke-dashoffset: 326.73;
+  transition: stroke-dashoffset 1s ease-out;
+}
+
+#score-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+#score-number {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #333;
+}
+
+#score-rank {
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-top: 0.3rem;
+  letter-spacing: 0.02em;
+}
+
+#score-info {
+  flex: 1;
+  min-width: 0;
+}
+
+#score-info h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.25rem;
+  word-break: break-all;
+}
+
+#result-eval-meta {
+  font-size: 0.85rem;
+  color: #868e96;
+}
+
+/* Sub Scores */
+#sub-scores {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.sub-score {
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.sub-score-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
   margin-bottom: 0.5rem;
 }
 
-#heatmap-container,
-#flick-heatmap-container {
+.sub-label {
+  font-size: 0.75rem;
+  color: #868e96;
+  font-weight: 500;
+}
+
+.sub-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.progress-track {
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  width: 0;
+  transition: width 0.8s ease-out;
+}
+
+/* ==================== Heatmaps ==================== */
+#heatmap-section {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+}
+
+#heatmap-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.heatmap-tab {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background: #fff;
+  color: #868e96;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.heatmap-tab.active {
+  background: #228be6;
+  border-color: #228be6;
+  color: #fff;
+}
+
+.heatmap-tab:not(.active):hover {
+  border-color: #228be6;
+  color: #228be6;
+}
+
+.heatmap-panel {
+  display: block;
+}
+
+.heatmap-wrap {
   display: flex;
   justify-content: center;
   overflow-x: auto;
 }
 
-#heatmap-canvas,
-#flick-heatmap-canvas {
+.heatmap-wrap canvas {
   border-radius: 12px;
 }
 
-#scores {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 0.75rem;
+/* ==================== Trail Controls ==================== */
+#trail-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+#trail-replay-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1.2rem;
+  background: #f8f9fa;
+  color: #495057;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#trail-replay-btn:hover {
+  border-color: #7048e8;
+  color: #7048e8;
+  background: #f3f0ff;
+}
+
+/* ==================== Frequency Chart ==================== */
+#frequency-section {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   margin-bottom: 1.5rem;
 }
 
-.score-card {
-  background: #fff;
-  border-radius: 10px;
-  padding: 1rem;
-  text-align: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-.score-label {
-  font-size: 0.8rem;
-  color: #868e96;
-  margin-bottom: 0.3rem;
-}
-
-.score-value {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #228be6;
-}
-
-#score-total .score-value {
-  font-size: 2rem;
-  color: #7048e8;
-}
-
-#details {
-  background: #fff;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-#details h3 {
+#frequency-section h3 {
   font-size: 0.95rem;
   color: #495057;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
-#stats-table {
-  font-size: 0.9rem;
+.freq-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
 }
 
-#stats-table table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-#stats-table th,
-#stats-table td {
-  padding: 0.5rem 0.75rem;
-  text-align: left;
-  border-bottom: 1px solid #f1f3f5;
-}
-
-#stats-table th {
-  color: #868e96;
-  font-weight: 500;
-  width: 50%;
-}
-
-#stats-table td {
+.freq-label {
+  width: 2.5rem;
+  text-align: right;
+  font-size: 0.85rem;
   font-weight: 600;
+  color: #495057;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+.freq-bar-track {
+  flex: 1;
+  height: 22px;
+  background: #f1f3f5;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.freq-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #228be6, #7048e8);
+  width: 0;
+  transition: width 0.6s ease-out;
+}
+
+.freq-count {
+  width: 3rem;
+  font-size: 0.8rem;
+  color: #868e96;
+  font-weight: 600;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.freq-pct {
+  width: 3rem;
+  font-size: 0.75rem;
+  color: #adb5bd;
+  flex-shrink: 0;
+}
+
+/* ==================== Stats Grid ==================== */
+#stats-section {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+}
+
+#stats-section h3 {
+  font-size: 0.95rem;
+  color: #495057;
+  margin-bottom: 1rem;
+}
+
+#stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 1rem 0.5rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.stat-number {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #333;
+  line-height: 1.2;
+}
+
+.stat-name {
+  font-size: 0.7rem;
+  color: #868e96;
+  margin-top: 0.3rem;
+}
+
+#unmapped-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f1f3f5;
+}
+
+#unmapped-section h4 {
+  font-size: 0.8rem;
+  color: #868e96;
+  margin-bottom: 0.5rem;
+}
+
+#unmapped-chars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.unmapped-tag {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  background: #fff5f5;
+  color: #e03131;
+  border: 1px solid #ffc9c9;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* ==================== Share ==================== */
+#share-actions {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+#share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.8rem;
+  background: #fff;
+  color: #495057;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#share-btn:hover {
+  border-color: #228be6;
+  color: #228be6;
+  background: #e7f5ff;
+}
+
+#share-btn.copied {
+  border-color: #40c057;
+  color: #40c057;
+  background: #d3f9d8;
+}
+
+/* ==================== Footer ==================== */
 footer {
   text-align: center;
   padding: 1.5rem;
@@ -318,7 +604,7 @@ footer a:hover {
   text-decoration: underline;
 }
 
-/* Error */
+/* ==================== Error ==================== */
 .error-message {
   background: #fff5f5;
   border: 1px solid #ffc9c9;
@@ -326,6 +612,13 @@ footer a:hover {
   padding: 1rem;
   color: #c92a2a;
   margin-bottom: 1rem;
+}
+
+/* ==================== Responsive ==================== */
+@media (min-width: 520px) {
+  #sub-scores {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 @media (max-width: 480px) {
@@ -337,7 +630,20 @@ footer a:hover {
     padding: 1rem 0.75rem 2rem;
   }
 
-  #scores {
+  #results-card {
+    padding: 1.25rem;
+  }
+
+  #score-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  #score-info h2 {
+    font-size: 1rem;
+  }
+
+  #stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
