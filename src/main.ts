@@ -175,7 +175,8 @@ document.querySelectorAll<HTMLButtonElement>('.heatmap-tab').forEach(tab => {
 function playTrail() {
   if (!currentCustard || !layoutInfo || !lastSimResult) return;
   const trailCanvas = document.getElementById('trail-canvas') as HTMLCanvasElement;
-  trailController = renderFingerTrail(trailCanvas, currentCustard, renderedKeys, layoutInfo, lastSimResult);
+  const cursorEl = document.getElementById('trail-cursor')!;
+  trailController = renderFingerTrail(trailCanvas, cursorEl, currentCustard, renderedKeys, layoutInfo, lastSimResult);
   trailController.play();
 }
 

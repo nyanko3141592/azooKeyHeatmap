@@ -389,7 +389,30 @@ section {
   border-radius: 12px;
 }
 
-/* ==================== Trail Controls ==================== */
+/* ==================== Trail ==================== */
+#trail-container {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+#trail-canvas {
+  border-radius: 12px;
+}
+
+#trail-cursor {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #7048e8 30%, rgba(112, 72, 232, 0.4) 70%, transparent);
+  box-shadow: 0 0 14px 4px rgba(112, 72, 232, 0.45);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  z-index: 1;
+}
+
 #trail-controls {
   display: flex;
   justify-content: center;

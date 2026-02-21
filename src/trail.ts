@@ -9,6 +9,7 @@ export interface TrailController {
 
 export function renderFingerTrail(
   canvas: HTMLCanvasElement,
+  cursorEl: HTMLElement,
   custard: Custard,
   renderedKeys: RenderedKey[],
   layoutInfo: LayoutInfo,
@@ -17,24 +18,30 @@ export function renderFingerTrail(
   const li = layoutInfo;
   let animId: number | null = null;
 
-  const points = simResult.keyHits.map(hit => {
-    let cx = (hit.x + hit.width / 2) * li.cellW;
-    let cy = (hit.y + hit.height / 2) * li.cellH;
+  const points: Array<{ x: number; y: number; isFlick: boolean }> = [];
+  for (const hit of simResult.keyHits) {
+    const cx = (hit.x + hit.width / 2) * li.cellW;
+    const cy = (hit.y + hit.height / 2) * li.cellH;
 
-    const offset = 0.2;
-    if (hit.flickDirection === 'left') cx -= hit.width * li.cellW * offset;
-    if (hit.flickDirection === 'right') cx += hit.width * li.cellW * offset;
-    if (hit.flickDirection === 'top') cy -= hit.height * li.cellH * offset;
-    if (hit.flickDirection === 'bottom') cy += hit.height * li.cellH * offset;
+    points.push({ x: cx, y: cy, isFlick: false });
 
-    return { x: cx, y: cy };
-  });
+    if (hit.flickDirection) {
+      const offset = 0.22;
+      let fx = cx, fy = cy;
+      if (hit.flickDirection === 'left') fx -= hit.width * li.cellW * offset;
+      if (hit.flickDirection === 'right') fx += hit.width * li.cellW * offset;
+      if (hit.flickDirection === 'top') fy -= hit.height * li.cellH * offset;
+      if (hit.flickDirection === 'bottom') fy += hit.height * li.cellH * offset;
+      points.push({ x: fx, y: fy, isFlick: true });
+    }
+  }
 
   function play() {
     stop();
+    cursorEl.style.opacity = '0';
 
     const ctx = renderKeyboardOnCanvas(canvas, custard, renderedKeys, li);
-    ctx.fillStyle = 'rgba(248, 249, 250, 0.5)';
+    ctx.fillStyle = 'rgba(248, 249, 250, 0.45)';
     ctx.fillRect(0, 0, li.totalW, li.totalH);
 
     if (points.length < 2) return;
@@ -55,26 +62,44 @@ export function renderFingerTrail(
         const curr = points[i];
         const dist = Math.sqrt((curr.x - prev.x) ** 2 + (curr.y - prev.y) ** 2);
 
-        const alpha = Math.min(0.12, 0.04 + dist * 0.001);
-        ctx.beginPath();
-        ctx.moveTo(prev.x, prev.y);
-        ctx.lineTo(curr.x, curr.y);
-        ctx.strokeStyle = `rgba(112, 72, 232, ${alpha})`;
-        ctx.lineWidth = 1.8;
-        ctx.lineCap = 'round';
-        ctx.stroke();
+        if (curr.isFlick) {
+          ctx.beginPath();
+          ctx.moveTo(prev.x, prev.y);
+          ctx.lineTo(curr.x, curr.y);
+          ctx.strokeStyle = 'rgba(34, 139, 230, 0.18)';
+          ctx.lineWidth = 2.5;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+        } else {
+          const alpha = Math.min(0.25, 0.08 + dist * 0.003);
+          ctx.beginPath();
+          ctx.moveTo(prev.x, prev.y);
+          ctx.lineTo(curr.x, curr.y);
+          ctx.strokeStyle = `rgba(112, 72, 232, ${alpha})`;
+          ctx.lineWidth = 2;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+        }
 
         ctx.beginPath();
-        ctx.arc(curr.x, curr.y, 2.2, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(34, 139, 230, 0.05)';
+        ctx.arc(curr.x, curr.y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(34, 139, 230, 0.1)';
         ctx.fill();
       }
 
       drawn = target;
 
+      if (drawn > 0 && drawn < total) {
+        const pos = points[drawn];
+        cursorEl.style.left = `${pos.x}px`;
+        cursorEl.style.top = `${pos.y}px`;
+        cursorEl.style.opacity = '1';
+      }
+
       if (progress < 1) {
         animId = requestAnimationFrame(frame);
       } else {
+        cursorEl.style.opacity = '0';
         animId = null;
       }
     }
@@ -87,6 +112,7 @@ export function renderFingerTrail(
       cancelAnimationFrame(animId);
       animId = null;
     }
+    cursorEl.style.opacity = '0';
   }
 
   return { play, stop };

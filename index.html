@@ -124,7 +124,12 @@
             <div class="heatmap-wrap"><canvas id="flick-heatmap-canvas"></canvas></div>
           </div>
           <div id="heatmap-panel-trail" class="heatmap-panel hidden">
-            <div class="heatmap-wrap"><canvas id="trail-canvas"></canvas></div>
+            <div class="heatmap-wrap">
+              <div id="trail-container">
+                <canvas id="trail-canvas"></canvas>
+                <div id="trail-cursor"></div>
+              </div>
+            </div>
             <div id="trail-controls">
               <button id="trail-replay-btn">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
